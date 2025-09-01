@@ -14,3 +14,10 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+.idea/
+.vs/
+cpp/vcpkg_installed/
+cpp/native/x64/
+cpp/x64/
+*.dll
