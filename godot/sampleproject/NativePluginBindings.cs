@@ -14,23 +14,23 @@ public partial class NativePluginBindings : Node
 		public const string LinuxAssemblyName = "libnative.so";
 	}
 	
+	// This declares the C++ function we will call. C# arrays get marshalled to pointers, so you don't have length info, that's why we provide gridSize so that C++ know how much it can allocate
 	[DllImport (Constants.PlaceHolderLibraryName)]
-	public static extern void GenerateSomeGeometry(Vector3[] vertices, Vector3[] normals, Vector2[] uv, int maxVerts, int[] indices, int maxTris);
+	public static extern void GenerateTerrain([Out] Vector3[] vertices, [Out] Vector3[] normals, [Out] Vector2[] uv, [Out] int[] indices, [In] int gridSize);
+	
+	// As above, but we're passing a function pointer
+	[DllImport (Constants.PlaceHolderLibraryName)]
+	static extern void InitBindings(IntPtr debugLog);
 
 	static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
 	{
 		var platformDependentName = GetLibraryName(libraryName);
-		//GD.PrintErr($"Attempting to load dynamic library {platformDependentName}");
-		IntPtr handle=IntPtr.Zero;
-		if (!NativeLibrary.TryLoad(platformDependentName, assembly, DllImportSearchPath.ApplicationDirectory, out handle))
-		{
-			//GD.Print($"Failed to load dynamic library {platformDependentName} -- retrying with path globalization");
-			platformDependentName = ProjectSettings.GlobalizePath($"res://{platformDependentName}");
-			if (!NativeLibrary.TryLoad(platformDependentName, assembly, searchPath, out handle))
-				GD.PrintErr($"Failed AGAIN to load dynamic library {platformDependentName}");
-		}
+		platformDependentName = ProjectSettings.GlobalizePath($"res://{platformDependentName}");
+		if (!NativeLibrary.TryLoad(platformDependentName, assembly, searchPath, out var handle))
+			GD.PrintErr($"Failed to load dynamic library {platformDependentName}");
 		return handle;
 	}
+	
 	static string GetLibraryName(string libraryName) => libraryName switch
 	{
 		Constants.PlaceHolderLibraryName => System.Environment.OSVersion.Platform switch
@@ -40,9 +40,6 @@ public partial class NativePluginBindings : Node
 		},
 		_ => libraryName,
 	};
-	
-	[DllImport (Constants.PlaceHolderLibraryName)]
-	static extern void InitBindings(IntPtr debugLog);
 
     /*
         C# functions callable from c++

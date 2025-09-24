@@ -29,16 +29,16 @@ mesh = SubResource("BoxMesh_ig7tw")
 surface_material_override/0 = SubResource("StandardMaterial3D_ig7tw")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.976054, -0.0765535, 0.203614, -0.00266042, 0.931758, 0.36307, -0.217513, -0.354917, 0.909242, 1.13224, 1.15431, 2.05501)
+transform = Transform3D(-0.47941828, 0.65498316, -0.584085, -0.11500155, 0.6129302, 0.7817233, 0.87001884, 0.44194308, -0.21852584, 1.13224, 34.394363, 40.14846)
 current = true
 fov = 76.5149
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.779764, 0.574733, -0.248293, 0, 0.396587, 0.917997, 0.626073, -0.715821, 0.309245, 1.61375, 7.12677, 0)
 
-[node name="ReloadBindings" type="Button" parent="."]
+[node name="RebuildMesh" type="Button" parent="."]
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Rebuild geometry"
 
-[connection signal="pressed" from="ReloadBindings" to="ProceduralMesh" method="OnRebuildMesh"]
+[connection signal="pressed" from="RebuildMesh" to="ProceduralMesh" method="OnRebuildMesh"]
