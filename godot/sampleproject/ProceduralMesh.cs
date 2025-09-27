@@ -50,6 +50,6 @@ public partial class ProceduralMesh : MeshInstance3D
 
     void OnRebuildMesh()
     {
-        NativePluginBindings.GenerateTerrain(verts, normals, uvs, indices, gridSize, 0,Godot.Time.GetTicksMsec() * 0.001f);
+        NativePluginBindings.GenerateTerrainFP(verts, normals, uvs, indices, gridSize, 0,Godot.Time.GetTicksMsec() * 0.001f);
     }
 }
