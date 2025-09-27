@@ -6,7 +6,7 @@ using GlmSharp;
 public partial class ProceduralMesh : MeshInstance3D
 {
     private RandomNumberGenerator rng;
-    const int gridSize = 1024;
+    const int gridSize = 2048;
     private Vector3[] verts;
     private Vector2[] uvs;
     private Vector3[] normals;
@@ -27,6 +27,19 @@ public partial class ProceduralMesh : MeshInstance3D
         indices = new int[maxTris*3];
         
         OnRebuildMesh();
+        
+        // Convert Lists to arrays and assign to surface array
+        surfaceArray[(int)Mesh.ArrayType.Vertex] = verts;
+        surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs;
+        surfaceArray[(int)Mesh.ArrayType.Normal] = normals;
+        surfaceArray[(int)Mesh.ArrayType.Index] = indices;
+
+        var arrMesh = Mesh as ArrayMesh;
+        if (arrMesh != null)
+        {
+            if (arrMesh.GetSurfaceCount() == 0)
+                arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+        }
     }
 
     public override void _Process(double delta)
@@ -38,19 +51,5 @@ public partial class ProceduralMesh : MeshInstance3D
     void OnRebuildMesh()
     {
         NativePluginBindings.GenerateTerrain(verts, normals, uvs, indices, gridSize, 0,Godot.Time.GetTicksMsec() * 0.001f);
-
-        // Convert Lists to arrays and assign to surface array
-        surfaceArray[(int)Mesh.ArrayType.Vertex] = verts;
-        surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs;
-        surfaceArray[(int)Mesh.ArrayType.Normal] = normals;
-        surfaceArray[(int)Mesh.ArrayType.Index] = indices;
-
-        // This LEAKS memory
-        var arrMesh = Mesh as ArrayMesh;
-        if (arrMesh != null)
-        {
-            arrMesh.ClearSurfaces();
-            arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-        }
     }
 }
