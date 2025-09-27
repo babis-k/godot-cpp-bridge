@@ -70,14 +70,12 @@ extern "C" {
         gDebugLog = debugLog;
     }
 
-    NAT_API void GenerateTerrain(glm::vec3* vertices, glm::vec3* normals, glm::vec2* uv, int* triangles, int gridSize)
+    NAT_API void GenerateTerrain(glm::vec3* vertices, glm::vec3* normals, glm::vec2* uv, int* triangles, int gridSize, float xo, float yo)
     {
         gDebugLog("Generating terrain vertex data...");
         const float denom = 1.0f/(gridSize-1);
 
         // Random value noise grid starting points every time
-        int xo = rand();
-        int yo = rand();
         for(int y=0;y<gridSize;++y)
             for (int x = 0; x < gridSize; ++x)
             {

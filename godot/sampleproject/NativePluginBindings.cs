@@ -16,7 +16,7 @@ public partial class NativePluginBindings : Node
 	
 	// This declares the C++ function we will call. C# arrays get marshalled to pointers, so you don't have length info, that's why we provide gridSize so that C++ know how much it can allocate
 	[DllImport (Constants.PlaceHolderLibraryName)]
-	public static extern void GenerateTerrain([Out] Vector3[] vertices, [Out] Vector3[] normals, [Out] Vector2[] uv, [Out] int[] indices, [In] int gridSize);
+	public static extern void GenerateTerrain([Out] Vector3[] vertices, [Out] Vector3[] normals, [Out] Vector2[] uv, [Out] int[] indices, [In] int gridSize, [In] float xo, [In] float yo);
 	
 	// As above, but we're passing a function pointer
 	[DllImport (Constants.PlaceHolderLibraryName)]
